@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071b35">
+<meta name="description" content="آزمایشگاه تعاملی فیزیک و هندسه هشتم؛ قابل استفاده آفلاین پس از دریافت اولیه">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>PHYSICS LAB 3.0 | آزمایشگاه فیزیک</title>
+<style>
+:root{
+ --bg:#07182d;--bg2:#0a2340;--panel:#102b49;--panel2:#143553;--line:#254663;
+ --text:#edf7ff;--muted:#a7bfd3;--blue:#55aaff;--cyan:#54e0e0;--gold:#ffca72;
+ --green:#66ddb0;--red:#ff8585;--shadow:0 20px 60px #0005;--radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 80% -10%,#164a72 0,transparent 38%),radial-gradient(ellipse at 0% 45%,#0b3650 0,transparent 32%),var(--bg);color:var(--text);font-family:'Vazirmatn',Tahoma,sans-serif;line-height:1.9}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh}
+.topbar{height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-bottom:1px solid #ffffff14;background:#07182ddd;backdrop-filter:blur(18px);position:sticky;top:0;z-index:30}
+.brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:.3px}
+.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#47a9ff,#42e1d3);display:grid;place-items:center;color:#06213a;font-size:22px;box-shadow:0 0 28px #4dc8e955}
+.brand small{display:block;color:var(--muted);font-size:10px;font-weight:600;letter-spacing:2px}
+.topright{display:flex;gap:10px;align-items:center}
+.status{font-size:12px;color:var(--green);border:1px solid #66ddb044;background:#66ddb012;padding:5px 11px;border-radius:30px}
+.btn{border:1px solid var(--line);color:var(--text);background:#173653;padding:9px 14px;border-radius:12px;font-size:13px;transition:.2s}
+.btn:hover{border-color:var(--cyan);transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(110deg,#2789e9,#20bfc4);border:0;color:#041a2e;font-weight:900}
+.btn.gold{background:linear-gradient(110deg,#f7c56e,#ffdf9d);border:0;color:#30200a;font-weight:900}
+.btn.danger{border-color:#ff858566;color:#ffaaaa}
+.shell{max-width:1440px;margin:auto;display:grid;grid-template-columns:260px minmax(0,1fr);gap:22px;padding:22px}
+.sidebar{position:sticky;top:94px;height:calc(100vh - 116px);overflow:auto;background:#0b223cdd;border:1px solid #ffffff14;border-radius:22px;padding:17px;box-shadow:var(--shadow)}
+.side-label{font-size:10px;color:#6f9ab9;letter-spacing:1.7px;font-weight:800;margin:8px 9px}
+.nav{display:grid;gap:5px}
+.nav button{border:0;background:transparent;color:#b6cadd;text-align:right;padding:10px 12px;border-radius:12px;font-size:13px;display:flex;gap:11px;align-items:center}
+.nav button span{width:23px;text-align:center;color:#75c9df}
+.nav button:hover,.nav button.active{background:linear-gradient(90deg,#1c5a7a66,#1b76a544);color:white}
+.sidebar-foot{margin-top:20px;padding:14px;border:1px solid #ffffff14;background:#ffffff08;border-radius:16px}
+.progress{height:7px;background:#25445f;border-radius:20px;overflow:hidden;margin:8px 0}
+.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:.3s}
+.small{font-size:11px;color:var(--muted)}
+main{min-width:0}
+.view{display:none;animation:fade .35s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:.3;transform:translateY(7px)}to{opacity:1;transform:none}}
+.hero{position:relative;overflow:hidden;padding:32px;border-radius:27px;background:linear-gradient(115deg,#0d3b65,#12547a 55%,#117d82);border:1px solid #74d8ef35;box-shadow:0 22px 70px #00101f77}
+.hero:before{content:"";position:absolute;width:350px;height:350px;border:1px solid #ffffff20;border-radius:50%;left:-90px;top:-200px;box-shadow:0 0 0 35px #ffffff08,0 0 0 70px #ffffff05}
+.hero:after{content:"";position:absolute;width:160px;height:160px;border:1px solid #7de8e744;border-radius:50%;left:12%;bottom:-125px}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.4fr .6fr;align-items:center;gap:20px}
+.kicker{font-size:11px;letter-spacing:3px;color:#9ce9f4;font-weight:800}
+h1{font-size:clamp(27px,4vw,43px);line-height:1.4;margin:7px 0}
+.hero p{max-width:720px;color:#d5edfa;margin:8px 0 18px}
+.hero-orb{width:190px;height:190px;margin:auto;border-radius:50%;display:grid;place-items:center;font-size:90px;background:radial-gradient(circle at 35% 30%,#ffffff40,#ffffff05 60%);border:1px solid #ffffff30;box-shadow:0 0 65px #43d6d477,inset 0 0 45px #ffffff12}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:11px;padding:5px 10px;border-radius:30px;border:1px solid #ffffff30;background:#ffffff12;color:#e6faff}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:17px 0}
+.stat,.card{background:linear-gradient(145deg,#102c49,#0c2440);border:1px solid #ffffff14;border-radius:19px;padding:16px;box-shadow:var(--shadow)}
+.stat .icon{font-size:19px;color:var(--cyan)}
+.stat strong{display:block;font-size:24px;margin-top:4px}
+.stat span{font-size:11px;color:var(--muted)}
+.section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:24px 2px 12px}
+.section-title h2{font-size:20px;margin:0}
+.section-title p{font-size:11px;color:var(--muted);margin:2px 0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card h3{margin:0 0 6px;font-size:15px}
+.card p{margin:5px 0;color:var(--muted);font-size:12px}
+.card-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:#4aa9ff1c;color:#78d9ef;font-size:22px;margin-bottom:12px}
+.card-link{display:flex;justify-content:space-between;align-items:center;margin-top:12px;color:#8de5ed;font-size:12px;font-weight:800}
+.panel{background:#0c2440;border:1px solid #ffffff16;border-radius:21px;padding:20px;margin:14px 0;box-shadow:var(--shadow)}
+.panel h2,.panel h3{margin-top:0}
+.muted{color:var(--muted)}
+.tag{font-size:10px;border:1px solid #ffffff22;padding:3px 8px;border-radius:30px;color:#a9d9ec}
+.field{width:100%;background:#071b32;border:1px solid #2b4b67;border-radius:11px;padding:10px 12px;color:var(--text);outline:none}
+.field:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #54e0e01b}
+label{font-size:12px;color:#bed3e4}
+.formrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.formrow>div{display:grid;gap:5px}
+.result{background:#071b32;border:1px dashed #3d7795;padding:13px;border-radius:13px;margin-top:12px;color:#b9f7ed;font-weight:800;direction:ltr;text-align:center}
+.formula{font-family:Consolas,monospace;direction:ltr;text-align:center;background:#071b32;border:1px dashed #3a6c8d;border-radius:13px;padding:13px;margin:12px 0;font-size:20px;color:#9deafa}
+.callout{border-right:3px solid var(--gold);background:#ffca7210;padding:12px 14px;border-radius:12px;color:#ffe3b2;font-size:13px;margin:12px 0}
+.lesson{border:1px solid #ffffff16;background:#102b49;border-radius:18px;padding:17px;margin:12px 0}
+.lesson h3{margin:0 0 7px}
+.lesson p,.lesson li{font-size:13px;color:#c0d4e5}
+.lesson .sub{color:#83d9e8;font-weight:800;font-size:12px}
+.flash{min-height:220px;display:grid;place-items:center;text-align:center;padding:24px;background:radial-gradient(circle at top,#19496c,#0a2039);border:1px solid #5bc9db44;border-radius:20px}
+.flash .q{font-size:19px;font-weight:800;max-width:650px}
+.flash .a{color:#a9f0d6;font-size:19px;font-weight:900;margin-top:12px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.table{width:100%;border-collapse:collapse;font-size:12px}
+.table th,.table td{padding:10px;border-bottom:1px solid #ffffff13;text-align:right}
+.table th{color:#8bdde8}
+.badge{display:inline-block;padding:4px 9px;border-radius:20px;background:#1c4c61;color:#a6f1e3;font-size:10px}
+.question{background:#102b49;border:1px solid #ffffff16;padding:16px;border-radius:16px;margin:12px 0}
+.option{display:block;width:100%;text-align:right;margin:7px 0;background:#0a2038;border:1px solid #294966;color:var(--text);padding:10px 12px;border-radius:11px}
+.option:hover{border-color:var(--cyan)}
+.option.correct{border-color:var(--green);background:#1b614a55}
+.option.wrong{border-color:var(--red);background:#713b3b55}
+.feedback{font-size:12px;min-height:23px;color:var(--gold);margin-top:8px}
+.kpi{font-size:27px;font-weight:900;color:var(--cyan)}
+.sim-stage{height:235px;border-radius:18px;background:radial-gradient(circle at center,#123b5c,#07192e);border:1px solid #2b5773;position:relative;overflow:hidden;display:grid;place-items:center}
+.charge{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-size:28px;font-weight:900;box-shadow:0 0 25px currentColor;position:absolute;top:50%;transform:translate(-50%,-50%)}
+.charge.pos{background:#ffb1a4;color:#7d1e20;left:32%}.charge.neg{background:#92d6ff;color:#103d70;left:68%}
+.fieldline{position:absolute;left:32%;top:50%;width:36%;height:1px;border-top:2px dashed #a7e8f1;transform:translateY(-50%)}
+.leaf{width:22px;height:80px;border-radius:80% 10% 80% 10%;background:linear-gradient(90deg,#d7bb69,#fff0ad);transform-origin:bottom;box-shadow:0 0 13px #ffdb81;transition:.3s}
+.leafbox{display:flex;gap:10px;align-items:end;height:105px}
+.empty{text-align:center;padding:28px;color:var(--muted);font-size:13px}
+.footer{text-align:center;padding:30px;color:#7392ad;font-size:11px}
+.toast{position:fixed;bottom:20px;left:20px;background:#d9fff2;color:#063c31;padding:10px 16px;border-radius:12px;font-size:12px;font-weight:800;box-shadow:var(--shadow);opacity:0;transform:translateY(12px);transition:.25s;z-index:50}
+.toast.show{opacity:1;transform:none}
+.mobile-nav{display:none}
+@media(max-width:980px){.shell{grid-template-columns:220px 1fr;padding:15px;gap:14px}.stats{grid-template-columns:repeat(2,1fr)}.hero-grid{grid-template-columns:1fr .4fr}.hero-orb{width:130px;height:130px;font-size:60px}}
+@media(max-width:720px){.topbar{height:62px;padding:0 13px}.status{display:none}.shell{display:block;padding:12px 12px 85px}.sidebar{display:none}.hero{padding:23px 18px}.hero-grid{grid-template-columns:1fr}.hero-orb{display:none}.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:21px}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:35;background:#07182df2;backdrop-filter:blur(16px);border-top:1px solid #ffffff20;justify-content:space-around;padding:8px 3px calc(8px + env(safe-area-inset-bottom))}.mobile-nav button{border:0;background:none;color:#9eb9ce;font-size:10px;display:grid;justify-items:center;gap:1px}.mobile-nav b{font-size:18px}.formrow{grid-template-columns:1fr}.panel{padding:15px}.section-title h2{font-size:17px}}
+@media(max-width:390px){.grid3{grid-template-columns:1fr}.topright .btn{padding:7px 9px;font-size:11px}}
+@media print{body{background:white;color:#17283b}.topbar,.sidebar,.mobile-nav,.no-print{display:none!important}.shell{display:block;padding:0}.view{display:none!important}#view-lessons{display:block!important}.lesson,.panel{background:white;color:#17283b;box-shadow:none;border:1px solid #bbb;break-inside:avoid}.lesson p,.lesson li,.muted{color:#333}.formula{color:#123;background:#f4f7fa}.hero{display:none}}
+
+/* PHYSICS LAB 3.0 refinements */
+:root{--bg:#081a30;--bg2:#0b2541;--panel:#102d4b;--panel2:#153a5a;--line:#2b506d;--text:#f2f8ff;--muted:#afc4d7;--blue:#62b5ff;--cyan:#5be2df;--gold:#ffd17d;--shadow:0 16px 42px #0003}
+html{scroll-behavior:auto}
+body{background:radial-gradient(ellipse at 82% 0%,#174b70 0,transparent 32%),radial-gradient(ellipse at 4% 48%,#103c55 0,transparent 28%),linear-gradient(145deg,#07182c,#091f38 55%,#07182c)}
+.topbar{background:#07182df2;border-bottom-color:#8ddfff20}
+.card,.stat,.panel,.lesson{border-color:#8edfff20;box-shadow:0 12px 34px #0002}
+.card{transition:border-color .18s,background .18s,box-shadow .18s}
+.card:hover{border-color:#58d8e477;background:linear-gradient(145deg,#143958,#0d2945);box-shadow:0 16px 38px #0003}
+.card-icon{border:1px solid #68c9ff33;background:linear-gradient(145deg,#1c5274,#123652);border-radius:13px;box-shadow:0 8px 24px #28b9d522}
+.nav button span{width:27px;height:27px;display:grid;place-items:center;border-radius:8px;background:#183e5c;color:#8ce4f0}
+.nav button.active span{background:#1b7890;color:#fff}
+.btn{transition:background .18s,border-color .18s,box-shadow .18s}
+.btn:hover{transform:none;box-shadow:0 5px 18px #0002}
+.view{animation:softIn .22s ease both}
+@keyframes softIn{from{opacity:.75}to{opacity:1}}
+.hero{background:linear-gradient(115deg,#103d67,#155777 56%,#147a7e);border-color:#83e8ef40}
+.hero-orb{border-radius:28px;background:linear-gradient(145deg,#ffffff20,#ffffff08)}
+.formula{border-style:solid;border-color:#4b8bad66;background:linear-gradient(135deg,#071b32,#0b2944);box-shadow:inset 0 0 24px #4bc8e10a}
+.lesson{background:linear-gradient(145deg,#112f4d,#0d2743)}
+.sim-stage{background:radial-gradient(circle at 50% 50%,#17496b,#091d34 72%),repeating-linear-gradient(0deg,transparent 0 29px,#8bdcf00a 30px),repeating-linear-gradient(90deg,transparent 0 29px,#8bdcf00a 30px)}
+.mobile-nav{overflow-x:auto;justify-content:flex-start;gap:2px;scrollbar-width:none}
+.mobile-nav::-webkit-scrollbar{display:none}
+.mobile-nav button{flex:0 0 67px;min-width:67px}
+.new-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.formula-card{padding:16px;border:1px solid #6bcde833;border-radius:17px;background:linear-gradient(145deg,#123654,#0b2743)}
+.formula-card .formula{margin:10px 0}
+.mini-chart{height:150px;width:100%;display:block;background:linear-gradient(180deg,#0b2944,#091e35);border:1px solid #2a526f;border-radius:15px}
+.step-track{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+.step-dot{padding:6px 10px;border:1px solid #3a617d;border-radius:20px;color:#a9c7db;font-size:11px}
+.step-dot.active{background:#17617a;color:white;border-color:#55d6dc}
+.mastery-item{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;padding:11px;border-bottom:1px solid #ffffff12}
+.mastery-num{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:#1a4564;color:#a4eaf0;font-weight:900}
+.mastery-item button{padding:7px 10px;font-size:11px}
+.daily-choice{display:block;width:100%;text-align:right;padding:12px;border-radius:12px;background:#0a213a;color:var(--text);border:1px solid #2b4d69;margin:8px 0}
+.daily-choice:disabled{opacity:.85;cursor:default}
+.daily-choice.selected{border-color:var(--cyan);background:#14506a}
+@media(max-width:720px){.new-feature-grid{grid-template-columns:1fr}.mastery-item{grid-template-columns:34px 1fr}.mastery-item button{grid-column:2}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+
+/* Interactive geometry lab */
+.geo-stage{position:relative;overflow:hidden;border:1px solid #36718e;border-radius:20px;background:radial-gradient(circle at 50% 45%,#153f60,#07192e 78%);padding:10px}
+.geo-svg{width:100%;height:auto;display:block;max-height:420px;touch-action:pan-y}
+.geo-svg text{font-family:Tahoma,sans-serif;fill:#e9f8ff;font-size:15px}
+.geo-svg .shape{fill:#3cc8d52a;stroke:#63e1e5;stroke-width:4;stroke-linejoin:round;transition:all .35s ease}
+.geo-svg .diag{stroke:#ffd17d;stroke-width:2.6;stroke-dasharray:8 6;transition:opacity .25s}
+.geo-svg .vertex{fill:#fff;stroke:#56d9e4;stroke-width:3}
+.geo-svg .tri-a{fill:#2bc6d044;stroke:#5ce2e6;stroke-width:2;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .35s}
+.geo-svg .tri-b{fill:#f6c66c30;stroke:#ffd17d;stroke-width:2;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .35s}
+.geo-svg .tri-a.separated{transform:translate(-22px,18px)}
+.geo-svg .tri-b.separated{transform:translate(22px,-18px)}
+#geoSeparateBtn:disabled{opacity:.45;cursor:not-allowed}
+.geo-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
+.geo-control{background:#0a213a;border:1px solid #2a526f;border-radius:14px;padding:12px}
+.geo-control label{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px}
+.geo-control input{width:100%;accent-color:#55d9e1}
+.geo-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
+.geo-metric{background:#0a213a;border:1px solid #2a526f;border-radius:13px;padding:11px;text-align:center}
+.geo-metric b{display:block;color:#9cecf0;font-size:18px;direction:ltr}
+.geo-metric span{font-size:11px;color:var(--muted)}
+.geo-note{font-size:12px;color:#c3d9e9;background:#ffffff08;border-right:3px solid var(--gold);padding:11px 13px;border-radius:10px;margin-top:12px}
+@media(max-width:720px){.geo-controls{grid-template-columns:1fr}.geo-metrics{grid-template-columns:1fr 1fr 1fr}.geo-metric{padding:8px 4px}.geo-metric b{font-size:14px}}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+ <div class="brand"><div class="logo">⚛</div><div>PHYSICS LAB <small>LEARN • EXPERIMENT • MASTER</small></div></div>
+ <div class="topright"><span class="status">● سیستم آماده یادگیری</span><button class="btn" id="installAppBtn" onclick="installApp()" hidden>نصب اپ</button><button class="btn" onclick="toggleFocus()">حالت تمرکز</button><button class="btn primary" onclick="printCurrent()">خروجی PDF</button></div>
+</header>
+<div class="shell">
+<aside class="sidebar">
+ <div class="side-label">مرکز فرماندهی</div>
+ <nav class="nav" id="sideNav">
+  <button class="active" data-view="home"><span>⌂</span>داشبورد</button>
+  <button data-view="lessons"><span>▤</span>درس‌نامه کامل</button>
+  <button data-view="tips"><span>✦</span>نکته‌های امتحانی</button>
+  <button data-view="flash"><span>▣</span>فلش‌کارت هوشمند</button>
+  <button data-view="lab"><span>⚗</span>آزمایشگاه مجازی</button>
+  <button data-view="geometry"><span>◇</span>آزمایشگاه هندسه</button>
+  <button data-view="calculator"><span>∑</span>ماشین‌حساب فیزیک</button>
+  <button data-view="exam"><span>◈</span>آزمون تیزهوشان</button>
+  <button data-view="mistakes"><span>✎</span>دفتر اشتباهات</button>
+  <button data-view="achievements"><span>♛</span>امتیاز و دستاورد</button>
+  <button data-view="formulas"><span>ƒx</span>فرمول‌نامه</button>
+  <button data-view="daily"><span>★</span>چالش روزانه</button>
+  <button data-view="solver"><span>∴</span>حل مرحله‌ای</button>
+  <button data-view="mastery"><span>▦</span>نقشه تسلط</button>
+ </nav>
+ <div class="sidebar-foot">
+  <b style="font-size:13px">مسیر تسلط تو</b>
+  <div class="progress"><i id="sideProgress"></i></div>
+  <div class="small"><span id="sideDone">۰</span> از ۱۰ مبحث تکمیل شده</div>
+  <div style="margin-top:12px"><span class="small">امتیاز کل</span><div class="kpi" id="sidePoints">۰ XP</div></div>
+ </div>
+ <div class="small" style="margin:15px 8px">نسخه ۳.۰ • ذخیره خودکار روی همین دستگاه</div>
+</aside>
+<main>
+<section class="view active" id="view-home">
+ <div class="hero"><div class="hero-grid"><div><div class="kicker">WELCOME TO YOUR DIGITAL LAB</div><h1>فیزیک را فقط حفظ نکن؛<br>درکش کن و آزمایشش کن.</h1><p>یک محیط یادگیری تعاملی برای علوم هشتم؛ از ساختار اتم و بار الکتریکی تا قانون کولن، میدان و جریان. درس بخوان، آزمایش کن و برای سؤال‌های سطح بالاتر آماده شو.</p><div class="chips"><span class="chip">۱۰ مبحث آموزشی</span><span class="chip">آزمایش‌های تعاملی</span><span class="chip">آزمون سطح پیشرفته</span><span class="chip">مرور هوشمند</span></div></div><div class="hero-orb">⚛</div></div></div>
+ <div class="stats">
+  <div class="stat"><span class="icon">✦</span><strong id="xpHome">۰</strong><span>امتیاز تجربه (XP)</span></div>
+  <div class="stat"><span class="icon">▤</span><strong id="completedHome">۰/۱۰</strong><span>مبحث تکمیل‌شده</span></div>
+  <div class="stat"><span class="icon">◈</span><strong id="bestHome">—</strong><span>بهترین نمره آزمون</span></div>
+  <div class="stat"><span class="icon">▣</span><strong id="dueHome">۰</strong><span>فلش‌کارت برای مرور</span></div>
+ </div>
+ <div class="section-title"><div><h2>از کجا شروع کنیم؟</h2><p>مسیر پیشنهادی برای یک جلسه مطالعه مفید</p></div><span class="tag">YOUR LEARNING PATH</span></div>
+ <div class="grid3">
+  <div class="card"><div class="card-icon">▤</div><h3>۱. یادگیری مفاهیم</h3><p>درس‌نامه را بخوان و مبحث را پس از مطالعه علامت بزن.</p><div class="card-link" onclick="showView('lessons')">رفتن به درس‌نامه ←</div></div>
+  <div class="card"><div class="card-icon">⚗</div><h3>۲. تجربه و آزمایش</h3><p>بارها و فاصله را تغییر بده و اثرشان را مشاهده کن.</p><div class="card-link" onclick="showView('lab')">ورود به آزمایشگاه ←</div></div>
+  <div class="card"><div class="card-icon">◈</div><h3>۳. سنجش تسلط</h3><p>با سؤال‌های مفهومی و محاسباتی خودت را محک بزن.</p><div class="card-link" onclick="showView('exam')">شروع آزمون ←</div></div>
+ </div>
+ <div class="section-title"><div><h2>ابزارهای تازه آزمایشگاه</h2><p>برای تمرین عمیق‌تر و سنجش واقعی یادگیری</p></div><span class="tag">LAB TOOLS 3.0</span></div>
+ <div class="grid3">
+  <div class="card"><div class="card-icon">ƒx</div><h3>فرمول‌نامه تعاملی</h3><p>فرمول‌ها، معنی نمادها و یک مثال کوتاه برای هر رابطه.</p><div class="card-link" onclick="showView('formulas')">باز کردن فرمول‌نامه ←</div></div>
+  <div class="card"><div class="card-icon">★</div><h3>چالش روزانه</h3><p>یک مسئله تازه در هر روز؛ امتیاز فقط یک بار ثبت می‌شود.</p><div class="card-link" onclick="showView('daily')">رفتن به چالش ←</div></div>
+  <div class="card"><div class="card-icon">∴</div><h3>حل مرحله‌ای</h3><p>داده‌ها، انتخاب فرمول، جایگذاری و محاسبه را قدم‌به‌قدم انجام بده.</p><div class="card-link" onclick="showView('solver')">شروع حل مسئله ←</div></div>
+ </div>
+ <div class="section-title"><div><h2>نقشه پیشرفت مباحث</h2><p>با تکمیل درس‌نامه، نقشه تسلطت به‌روز می‌شود.</p></div><button class="btn" onclick="showView('mastery')">نمایش کامل</button></div>
+ <div class="panel"><div id="homeMastery"></div></div>
+ <div class="section-title"><div><h2>مرور سریع فرمول‌ها</h2><p>فرمول‌های پایه این فصل</p></div><button class="btn" onclick="showView('calculator')">ماشین‌حساب</button></div>
+ <div class="grid2">
+  <div class="card"><span class="tag">بار الکتریکی</span><div class="formula">Q = n × e</div><p>تعداد بارهای بنیادی منتقل‌شده</p></div>
+  <div class="card"><span class="tag">قانون کولن</span><div class="formula">F = k |q₁q₂| / r²</div><p>نیروی بین دو بار نقطه‌ای</p></div>
+  <div class="card"><span class="tag">شدت میدان</span><div class="formula">E = F / q</div><p>نیرو به ازای واحد بار آزمایشی</p></div>
+  <div class="card"><span class="tag">شدت جریان</span><div class="formula">I = Q / t</div><p>بار عبوری در واحد زمان</p></div>
+ </div>
+</section>
+
+<section class="view" id="view-lessons">
+ <div class="section-title"><div><h2>درس‌نامه تعاملی فیزیک</h2><p>مطالب را بخوان و برای ثبت پیشرفت، هر مبحث را تکمیل کن.</p></div><button class="btn primary no-print" onclick="window.print()">چاپ درس‌نامه</button></div>
+ <div class="callout">حالت مطالعه بدون پاسخ: مثال‌ها و پاسخ‌های تشریحی را می‌توانی موقتاً پنهان کنی و خودت حل کنی.</div>
+ <div class="panel no-print"><label><input type="checkbox" id="hideAnswers" onchange="setStudyMode(this.checked)"> فعال‌سازی حالت مطالعه بدون پاسخ</label></div>
+ <div id="lessonList"></div>
+</section>
+
+<section class="view" id="view-tips">
+ <div class="section-title"><div><h2>نکته‌های امتحانی طلایی</h2><p>نکته‌هایی که باید بتوانی بدون نگاه کردن توضیح بدهی.</p></div><span class="badge">HIGH PRIORITY</span></div>
+ <div id="tipsList"></div>
+ <div class="panel"><h3>چک‌لیست شب امتحان</h3><div id="checklist"></div></div>
+</section>
+
+<section class="view" id="view-flash">
+ <div class="section-title"><div><h2>فلش‌کارت و مرور هوشمند</h2><p>پاسخ را حدس بزن، سپس میزان تسلطت را مشخص کن.</p></div><span class="tag">SPACED REVIEW</span></div>
+ <div class="panel">
+  <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="tag" id="flashCount">کارت ۱ از ۱</span><span class="small" id="flashDue">مرورهای امروز</span></div>
+  <div class="flash"><div><div class="small">پرسش</div><div class="q" id="flashQuestion">برای شروع روی نمایش پاسخ بزن.</div><div class="a" id="flashAnswer" hidden></div></div></div>
+  <div class="actions no-print"><button class="btn primary" onclick="revealFlash()">نمایش پاسخ</button><button class="btn" onclick="rateFlash('again')">هنوز بلد نیستم</button><button class="btn gold" onclick="rateFlash('known')">بلدم ✓</button><button class="btn" onclick="nextFlash()">کارت بعدی ←</button></div>
+ </div>
+ <div class="panel"><h3>روش مرور</h3><p class="muted">کارت‌هایی که «هنوز بلد نیستم» انتخاب می‌کنی زودتر دوباره نمایش داده می‌شوند. کارت‌های مسلط با فاصله بیشتری مرور می‌شوند. زمان مرور و نتیجه‌ها روی همین دستگاه ذخیره می‌شوند.</p></div>
+</section>
+
+<section class="view" id="view-lab">
+ <div class="section-title"><div><h2>آزمایشگاه مجازی</h2><p>پارامترها را تغییر بده و نتیجه فیزیکی را مشاهده کن.</p></div><span class="tag">INTERACTIVE SIMULATIONS</span></div>
+ <div class="panel">
+  <h3>آزمایش ۱: قانون کولن</h3><p class="muted">اندازه بارها و فاصله را تغییر بده. شبیه‌سازی، اندازه نیرو را با فرض خلأ محاسبه می‌کند.</p>
+  <div class="sim-stage" id="coulombStage"><div class="fieldline"></div><div class="charge pos">+</div><div class="charge neg">−</div></div>
+  <div class="formrow">
+   <div><label>بار اول (میکروکولن)</label><input class="field" id="labQ1" type="number" value="2" step="0.5"></div>
+   <div><label>بار دوم (میکروکولن)</label><input class="field" id="labQ2" type="number" value="-3" step="0.5"></div>
+   <div><label>فاصله (متر)</label><input class="field" id="labR" type="number" value="0.3" min="0.01" step="0.05"></div>
+   <div><label>نوع برهم‌کنش</label><div class="result" id="labType">جاذبه</div></div>
+  </div>
+  <button class="btn primary" onclick="runCoulomb()">اجرای آزمایش</button><div class="result" id="labResult">نیرو: —</div>
+ </div>
+ <div class="panel">
+  <h3>آزمایش ۲: برق‌نما</h3><p class="muted">میزان نزدیک شدن جسم باردار را تغییر بده و ببین برگ‌های برق‌نما چگونه از هم باز می‌شوند. این یک نمایش مفهومی ساده‌شده است.</p>
+  <label>میزان نزدیک شدن جسم باردار</label><input id="electroRange" type="range" min="0" max="100" value="20" style="width:100%;accent-color:#54e0e0" oninput="runElectro()">
+  <div style="display:flex;justify-content:space-around;align-items:center;padding:20px"><div style="font-size:55px" id="rod">⚡</div><div style="text-align:center"><div style="width:15px;height:55px;background:#c8d7df;margin:auto;border-radius:8px"></div><div class="leafbox"><div class="leaf" id="leaf1"></div><div class="leaf" id="leaf2"></div></div><div class="small">برق‌نما</div></div></div>
+  <div class="result" id="electroText">جسم هنوز دور است.</div>
+ </div>
+ <div class="panel">
+  <h3>آزمایش ۳: رابطه جریان و زمان</h3><p class="muted">با ثابت بودن بار عبوری، زمان را تغییر بده و اثر آن را روی شدت جریان ببین.</p>
+  <div class="formrow"><div><label>بار عبوری Q (کولن)</label><input class="field" id="currentQ" type="number" value="12"></div><div><label>زمان t (ثانیه)</label><input class="field" id="currentT" type="number" value="3"></div></div>
+  <button class="btn primary" onclick="runCurrent()">محاسبه جریان</button><div class="result" id="currentResult">I = 4 A</div>
+ </div>
+</section>
+
+<section class="view" id="view-calculator">
+ <div class="section-title"><div><h2>ماشین‌حساب فیزیک</h2><p>محاسبه‌گرهای سریع برای فرمول‌های این فصل</p></div><span class="tag">PHYSICS TOOLS</span></div>
+ <div class="panel">
+  <h3>قانون کولن</h3><div class="formula">F = k × |q₁q₂| / r²</div>
+  <div class="formrow"><div><label>q₁ (میکروکولن)</label><input class="field" id="cq1" type="number" value="2"></div><div><label>q₂ (میکروکولن)</label><input class="field" id="cq2" type="number" value="3"></div><div><label>فاصله r (متر)</label><input class="field" id="cr" type="number" value="0.5" min="0.000001"></div></div>
+  <button class="btn primary" onclick="calcCoulomb()">محاسبه نیرو</button><div class="result" id="cResult">نتیجه اینجا نمایش داده می‌شود.</div>
+ </div>
+ <div class="panel">
+  <h3>شدت میدان الکتریکی</h3><div class="formula">E = F / q</div>
+  <div class="formrow"><div><label>نیرو F (نیوتون)</label><input class="field" id="ef" type="number" value="0.004"></div><div><label>بار q (میکروکولن)</label><input class="field" id="eq" type="number" value="2"></div></div>
+  <button class="btn primary" onclick="calcField()">محاسبه میدان</button><div class="result" id="eResult">نتیجه اینجا نمایش داده می‌شود.</div>
+ </div>
+ <div class="panel">
+  <h3>شدت جریان الکتریکی</h3><div class="formula">I = Q / t</div>
+  <div class="formrow"><div><label>بار Q (کولن)</label><input class="field" id="iq" type="number" value="6"></div><div><label>زمان t (ثانیه)</label><input class="field" id="it" type="number" value="4"></div></div>
+  <button class="btn primary" onclick="calcCurrent()">محاسبه جریان</button><div class="result" id="iResult">نتیجه اینجا نمایش داده می‌شود.</div>
+ </div>
+ <div class="panel">
+  <h3>تعداد الکترون‌های منتقل‌شده</h3><div class="formula">n = |Q| / e</div>
+  <div class="formrow"><div><label>اندازه بار Q (کولن)</label><input class="field" id="nq" type="number" value="3.2e-19"></div></div>
+  <button class="btn primary" onclick="calcElectrons()">محاسبه تعداد</button><div class="result" id="nResult">نتیجه اینجا نمایش داده می‌شود.</div>
+ </div>
+ <div class="callout">ثابت‌ها: e = 1.6×10⁻¹⁹ C و k = 9×10⁹ N·m²/C². ورودی‌های میکروکولن در محاسبه به کولن تبدیل می‌شوند.</div>
+</section>
+
+<section class="view" id="view-exam">
+ <div class="section-title"><div><h2>آزمون سطح تیزهوشان</h2><p>سؤال‌های مفهومی و محاسباتی با تصحیح خودکار و تحلیل پاسخ</p></div><span class="tag">CHALLENGE MODE</span></div>
+ <div class="panel" id="examStart"><h3>آماده‌ای؟</h3><p class="muted">هر آزمون شامل ۱۰ سؤال تصادفی از بانک سؤال است. برای هر سؤال یک گزینه انتخاب کن. در پایان، نمره و پاسخ تشریحی نمایش داده می‌شود.</p><div class="formrow"><div><label>تعداد سؤال</label><select class="field" id="examCount"><option value="5">۵ سؤال</option><option value="10" selected>۱۰ سؤال</option><option value="15">۱۵ سؤال</option></select></div><div><label>زمان پیشنهادی</label><div class="result">۹۰ ثانیه برای هر سؤال</div></div></div><button class="btn primary" onclick="startExam()">شروع آزمون</button></div>
+ <div id="examArea" hidden><div class="panel"><div style="display:flex;justify-content:space-between"><b id="examProgress">سؤال ۱</b><b id="examTimer" class="tag">زمان: ۰:۰۰</b></div><div class="progress"><i id="examBar"></i></div></div><div id="questionHost"></div><div class="actions"><button class="btn primary" onclick="nextQuestion()">ثبت پاسخ و ادامه ←</button><button class="btn danger" onclick="finishExam()">پایان آزمون</button></div></div>
+ <div id="examResult" class="panel" hidden></div>
+</section>
+
+<section class="view" id="view-mistakes">
+ <div class="section-title"><div><h2>دفتر اشتباهات من</h2><p>پاسخ‌های غلط آزمون را اینجا نگه دار تا دوباره تمرین کنی.</p></div><button class="btn danger" onclick="clearMistakes()">پاک کردن دفتر</button></div>
+ <div class="panel"><div class="kpi" id="mistakeCount">۰</div><span class="small">تعداد سؤال‌های ذخیره‌شده</span><div id="mistakeList"></div></div>
+</section>
+
+<section class="view" id="view-achievements">
+ <div class="section-title"><div><h2>امتیاز، سطح و دستاوردها</h2><p>پیشرفتت را ببین؛ هر قدم کوچک مهم است.</p></div><span class="tag">YOUR PROGRESS</span></div>
+ <div class="stats"><div class="stat"><strong id="xpTotal">۰</strong><span>امتیاز XP</span></div><div class="stat"><strong id="level">۱</strong><span>سطح فعلی</span></div><div class="stat"><strong id="examBest">—</strong><span>بهترین نمره</span></div><div class="stat"><strong id="achCount">۰/۶</strong><span>دستاوردها</span></div></div>
+ <div class="panel"><h3>نوار پیشرفت سطح</h3><div class="progress"><i id="levelBar"></i></div><p class="small" id="levelText">برای بالا رفتن سطح، درس بخوان و تمرین حل کن.</p></div>
+ <div class="grid3" id="achievementGrid"></div>
+ <div class="panel"><h3>فعالیت‌های اخیر</h3><div id="activityLog" class="muted small">هنوز فعالیتی ثبت نشده است.</div></div>
+ <div class="panel"><button class="btn danger" onclick="resetAll()">بازنشانی کامل پیشرفت این دستگاه</button><p class="small">این کار امتیازها، نشان‌ها، اشتباهات و وضعیت مطالعه را پاک می‌کند.</p></div>
+</section>
+
+<section class="view" id="view-formulas">
+ <div class="section-title"><div><h2>فرمول‌نامه فیزیک هشتم</h2><p>رابطه‌ها، معنی نمادها و مثال‌های کوتاه در یک‌جا</p></div><span class="tag">GRADE 8 • ADVANCED</span></div>
+ <div class="callout">نکته: قبل از جایگذاری، یکاها را بررسی کن. میکروکولن را به کولن تبدیل کن: ۱ μC = ۱۰⁻⁶ C.</div>
+ <div class="new-feature-grid">
+  <div class="formula-card"><span class="tag">بار الکتریکی</span><div class="formula">Q = n × e</div><b>Q: بار خالص • n: تعداد بار بنیادی • e: بار بنیادی</b><p>مثال: اگر ۳ الکترون منتقل شود، اندازه بار برابر ۳ × ۱٫۶×۱۰⁻¹⁹ کولن است.</p></div>
+  <div class="formula-card"><span class="tag">قانون کولن</span><div class="formula">F = k |q₁q₂| / r²</div><b>F: نیرو • q: بارها • r: فاصله • k = ۹×۱۰⁹</b><p>اگر فاصله ۲ برابر شود، نیرو یک‌چهارم می‌شود.</p></div>
+  <div class="formula-card"><span class="tag">شدت میدان</span><div class="formula">E = F / q</div><b>E: میدان • F: نیرو • q: بار آزمایشی</b><p>واحد میدان: نیوتون بر کولن (N/C).</p></div>
+  <div class="formula-card"><span class="tag">شدت جریان</span><div class="formula">I = Q / t</div><b>I: جریان • Q: بار عبوری • t: زمان</b><p>مثال: عبور ۱۲ کولن در ۳ ثانیه یعنی جریان ۴ آمپر.</p></div>
+ </div>
+ <div class="panel"><h3>تغییرات چندبرابری در قانون کولن</h3><p class="muted">این نمودار نشان می‌دهد با ثابت بودن بارها، افزایش فاصله چه اثری بر نیرو دارد.</p>
+  <svg class="mini-chart" viewBox="0 0 640 150" role="img" aria-label="نمودار کاهش نیرو با افزایش فاصله">
+   <g stroke="#315b78" stroke-width="1"><path d="M55 15V120H610M55 45H610M55 75H610M55 105H610" fill="none"/></g>
+   <path d="M65 20 C100 48 130 72 180 88 S290 108 370 114 S500 117 600 118" fill="none" stroke="#5be2df" stroke-width="4" stroke-linecap="round"/>
+   <g fill="#9ed9ed" font-size="11"><text x="58" y="139">فاصله کم</text><text x="540" y="139">فاصله زیاد</text><text x="64" y="13">نیرو</text></g>
+  </svg><p class="small">وقتی فاصله n برابر شود، نیرو به ۱/n² برابر مقدار اولیه می‌رسد.</p>
+ </div>
+</section>
+<section class="view" id="view-daily">
+ <div class="section-title"><div><h2>چالش روزانه فیزیک</h2><p>هر روز یک سؤال مفهومی یا محاسباتی در سطح هشتم تیزهوشان</p></div><span class="tag" id="dailyDateLabel">TODAY'S CHALLENGE</span></div>
+ <div class="panel"><div class="chips"><span class="chip">یک سؤال در روز</span><span class="chip">۱۰ امتیاز برای پاسخ درست</span><span class="chip">بدون محدودیت زمانی</span></div>
+ <div id="dailyQuestion" class="question"></div><div id="dailyFeedback" class="feedback" aria-live="polite"></div><div class="small" id="dailyStatus"></div></div>
+</section>
+<section class="view" id="view-solver">
+ <div class="section-title"><div><h2>کارگاه حل مرحله‌ای مسئله</h2><p>مسئله را از داده‌ها تا پاسخ، قدم‌به‌قدم حل کن.</p></div><span class="tag">STEP BY STEP</span></div>
+ <div class="panel"><h3>مسئله: قانون کولن</h3><p class="muted">دو بار ۲ و ۳ میکروکولن در فاصله ۳۰ سانتی‌متری قرار دارند. اندازه نیروی بین آن‌ها را محاسبه کن.</p>
+  <div class="step-track"><span class="step-dot active" id="solverDot1">۱. داده‌ها</span><span class="step-dot" id="solverDot2">۲. فرمول</span><span class="step-dot" id="solverDot3">۳. جایگذاری</span><span class="step-dot" id="solverDot4">۴. پاسخ</span></div>
+  <div id="solverStage1"><div class="formrow"><div><label>بار اول q₁ (μC)</label><input class="field" id="solveQ1" type="number" value="2"></div><div><label>بار دوم q₂ (μC)</label><input class="field" id="solveQ2" type="number" value="3"></div><div><label>فاصله r (cm)</label><input class="field" id="solveR" type="number" value="30"></div></div><button class="btn primary" onclick="solverCheckData()">بررسی داده‌ها و ادامه</button><div class="feedback" id="solverFeedback1"></div></div>
+  <div id="solverStage2" hidden><p>کدام رابطه برای محاسبه نیروی بین دو بار مناسب است؟</p><button class="option" onclick="solverChooseFormula(false)">F = q / t</button><button class="option" onclick="solverChooseFormula(true)">F = k |q₁q₂| / r²</button><button class="option" onclick="solverChooseFormula(false)">E = F / q</button><div class="feedback" id="solverFeedback2"></div></div>
+  <div id="solverStage3" hidden><p>واحدها را به دستگاه SI تبدیل کن و سپس جایگذاری را انجام بده:</p><div class="formula">q₁ = 2×10⁻⁶ C | q₂ = 3×10⁻⁶ C | r = 0.30 m</div><button class="btn primary" onclick="solverCalculate()">جایگذاری و محاسبه</button><div class="feedback" id="solverFeedback3"></div></div>
+  <div id="solverStage4" hidden><div class="result" id="solverFinal"></div><p class="muted">اگر دو بار همنام باشند نیرو دافعه و اگر ناهمنام باشند نیرو جاذبه است.</p><button class="btn" onclick="resetSolver()">حل دوباره</button></div>
+ </div>
+</section>
+
+<section class="view" id="view-geometry">
+ <div class="section-title"><div><h2>آزمایشگاه تعاملی متوازی‌الاضلاع</h2><p>زاویه‌ها و طول ضلع‌ها را تغییر بده و اثر آن را روی قطرها ببین.</p></div><span class="tag">GEOMETRY LAB</span></div>
+ <div class="panel">
+  <div class="chips"><span class="chip">قابلیت تغییر زاویه</span><span class="chip">قطرهای پویا</span><span class="chip">نمایش دو مثلث هم‌نهشت</span></div>
+  <div class="geo-stage">
+   <svg class="geo-svg" id="geoSvg" viewBox="0 0 520 330" role="img" aria-label="متوازی‌الاضلاع متحرک با قطرها">
+    <defs><marker id="geoArrow" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="#ffd17d"/></marker></defs>
+    <polygon id="geoPoly" class="shape" points="90,250 310,250 430,130 210,130"/>
+    <polygon id="geoTriA" class="tri-a" points="90,250 310,250 430,130" opacity="0"/>
+    <polygon id="geoTriB" class="tri-b" points="90,250 430,130 210,130" opacity="0"/>
+    <line id="geoDiag1" class="diag" x1="90" y1="250" x2="430" y2="130" opacity="0"/>
+    <line id="geoDiag2" class="diag" x1="310" y1="250" x2="210" y2="130" opacity="0"/>
+    <circle id="geoA" class="vertex" cx="90" cy="250" r="6"/><circle id="geoB" class="vertex" cx="310" cy="250" r="6"/><circle id="geoC" class="vertex" cx="430" cy="130" r="6"/><circle id="geoD" class="vertex" cx="210" cy="130" r="6"/>
+    <text id="geoLabelA" x="70" y="275">A</text><text id="geoLabelB" x="310" y="278">B</text><text id="geoLabelC" x="440" y="125">C</text><text id="geoLabelD" x="190" y="112">D</text>
+    <text id="geoAngleLabel" x="110" y="228" fill="#ffd17d">∠A = 45°</text>
+   </svg>
+  </div>
+  <div class="geo-controls">
+   <div class="geo-control"><label for="geoAngle">زاویه داخلی A <b id="geoAngleValue">۴۵°</b></label><input id="geoAngle" type="range" min="25" max="155" value="45" oninput="updateGeometry()"></div>
+   <div class="geo-control"><label for="geoSide">طول ضلع مایل <b id="geoSideValue">۱۲۰</b></label><input id="geoSide" type="range" min="70" max="145" value="120" oninput="updateGeometry()"></div>
+  </div>
+  <div class="geo-metrics">
+   <div class="geo-metric"><b id="geoDiagAC">—</b><span>قطر AC</span></div>
+   <div class="geo-metric"><b id="geoDiagBD">—</b><span>قطر BD</span></div>
+   <div class="geo-metric"><b id="geoAngleA">۴۵°</b><span>زاویه A</span></div>
+   <div class="geo-metric"><b id="geoAngleB">۱۳۵°</b><span>زاویه B</span></div>
+   <div class="geo-metric"><b id="geoAngleC">۴۵°</b><span>زاویه C</span></div>
+   <div class="geo-metric"><b id="geoAngleD">۱۳۵°</b><span>زاویه D</span></div>
+  </div>
+  <div class="actions">
+   <button class="btn" id="geoDiagsBtn" onclick="toggleGeoDiagonals()">نمایش قطرها</button>
+   <button class="btn" id="geoTrianglesBtn" onclick="toggleGeoTriangles()">تقسیم به دو مثلث</button>
+   <button class="btn gold" id="geoSeparateBtn" onclick="separateGeoTriangles()" disabled>حرکت متحرک مثلث‌ها</button>
+   <button class="btn" onclick="resetGeometry()">بازنشانی شکل</button>
+  </div>
+  <div class="actions" aria-label="انتخاب قطر برای تقسیم شکل">
+   <span class="tag">قطرِ تقسیم‌کننده:</span>
+   <button class="btn primary" id="geoUseAC" onclick="setGeoDiagonal('AC')">قطر AC</button>
+   <button class="btn" id="geoUseBD" onclick="setGeoDiagonal('BD')">قطر BD</button>
+  </div>
+  <div class="geo-note" id="geoExplain">در متوازی‌الاضلاع، زاویه‌های روبه‌رو برابر و زاویه‌های مجاور مکمل‌اند. با تغییر زاویه، طول دو قطر نیز تغییر می‌کند.</div>
+ </div>
+ <div class="grid2">
+  <div class="formula-card"><h3>ویژگی قطرها</h3><p class="muted">قطرهای متوازی‌الاضلاع یکدیگر را نصف می‌کنند؛ نقطه برخورد آن‌ها وسط هر دو قطر است.</p><div class="formula">AO = OC و BO = OD</div></div>
+  <div class="formula-card"><h3>تقسیم به مثلث‌ها</h3><p class="muted">کشیدن هر قطر، متوازی‌الاضلاع را به دو مثلث هم‌نهشت تقسیم می‌کند.</p><div class="formula">مساحت هر مثلث = نصف مساحت متوازی‌الاضلاع</div></div>
+ </div>
+</section>
+
+<section class="view" id="view-mastery">
+ <div class="section-title"><div><h2>نقشه تسلط درسی</h2><p>وضعیت هر مبحث را ببین و مسیر بعدی را انتخاب کن.</p></div><span class="tag">YOUR MASTERY MAP</span></div>
+ <div class="panel"><div class="stats"><div class="stat"><strong id="masteryDone">۰/۱۰</strong><span>مباحث تکمیل‌شده</span></div><div class="stat"><strong id="masteryPercent">۰٪</strong><span>درصد پیشرفت</span></div></div><div class="progress"><i id="masteryBar"></i></div><div id="masteryList"></div></div>
+</section>
+
+</main>
+</div>
+<nav class="mobile-nav">
+ <button onclick="showView('home')"><b>⌂</b>خانه</button><button onclick="showView('lessons')"><b>▤</b>درس‌ها</button><button onclick="showView('lab')"><b>⚗</b>آزمایشگاه</button><button onclick="showView('geometry')"><b>◇</b>هندسه</button><button onclick="showView('exam')"><b>◈</b>آزمون</button><button onclick="showView('flash')"><b>▣</b>فلش‌کارت</button><button onclick="showView('formulas')"><b>ƒx</b>فرمول‌نامه</button><button onclick="showView('daily')"><b>★</b>چالش</button><button onclick="showView('solver')"><b>∴</b>حل مرحله‌ای</button><button onclick="showView('mastery')"><b>▦</b>تسلط</button>
+</nav>
+<div class="footer">PHYSICS LAB 3.0 • یک آزمایشگاه آموزشی برای یادگیری مفهومی فیزیک هشتم<br>اطلاعات پیشرفت فقط در حافظه مرورگر همین دستگاه ذخیره می‌شود.</div>
+<div class="toast" id="toast"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id), fmt=n=>Number(n).toLocaleString('fa-IR',{maximumFractionDigits:5}), sci=n=>Number(n).toExponential(3).replace('e',' × 10^');
+const KEY='physicsLab20State';
+const defaultState={xp:0,completed:[],mistakes:[],best:null,activity:[],flash:{},checklist:[]};
+let state;try{state={...defaultState,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){state={...defaultState}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));renderStats()}
+function toast(t){let x=$('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2100)}
+function addXP(n,why){state.xp+=n;state.activity.unshift(why+' (+'+n+' XP)');state.activity=state.activity.slice(0,8);save();toast(why+'؛ +'+n+' XP')}
+function showView(name){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('view-'+name).classList.add('active');document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===name));if(name==='mistakes')renderMistakes();if(name==='achievements')renderAchievements();if(name==='mastery')renderMastery();if(name==='daily')renderDaily()}
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
+function renderStats(){let n=state.completed.length; $('xpHome').textContent=fmt(state.xp);$('completedHome').textContent=fmt(n)+'/۱۰';$('bestHome').textContent=state.best===null?'—':fmt(state.best)+'٪';$('dueHome').textContent=fmt(flashCards.filter((c,i)=>!state.flash[i]||state.flash[i].due<=Date.now()).length);$('sideDone').textContent=fmt(n);$('sideProgress').style.width=n*10+'%';$('sidePoints').textContent=fmt(state.xp)+' XP';$('xpTotal').textContent=fmt(state.xp);$('examBest').textContent=state.best===null?'—':fmt(state.best)+'٪';$('bestHome').textContent=state.best===null?'—':fmt(state.best)+'٪';}
+const lessons=[
+['ساختار اتم و بار الکتریکی','اتم از پروتون، نوترون و الکترون تشکیل شده است. پروتون بار مثبت، الکترون بار منفی و نوترون بار الکتریکی ندارد. پروتون و نوترون در هسته‌اند و الکترون‌ها پیرامون هسته قرار دارند.','جسم خنثی تعداد پروتون و الکترون برابر دارد. اگر الکترون از دست بدهد مثبت و اگر الکترون بگیرد منفی می‌شود. بار بنیادی پروتون و الکترون از نظر اندازه برابر و از نظر علامت مخالف است.','e = 1.6 × 10⁻¹⁹ C','جسمی ۱۰ پروتون و ۱۲ الکترون دارد. بار خالص آن چیست؟','منفی؛ چون دو الکترون بیشتر از پروتون دارد. اندازه بار خالص 2e = 3.2 × 10⁻¹⁹ C است.'],
+['قانون پایستگی بار','بار الکتریکی در یک مجموعه منزوی نه ایجاد می‌شود و نه از بین می‌رود؛ فقط از جسمی به جسم دیگر انتقال می‌یابد. بنابراین مجموع جبری بارها ثابت می‌ماند.','در باردار شدن اجسام معمولی، الکترون‌ها جابه‌جا می‌شوند و پروتون‌ها در هسته باقی می‌مانند. اگر جسمی الکترون از دست بدهد، جسم دیگر همان تعداد الکترون را دریافت می‌کند.','Q کل قبل = Q کل بعد','دو جسم خنثی در اثر مالش، یکی ۵ الکترون از دست می‌دهد. جسم دیگر چه باری می‌گیرد؟','به اندازه بار ۵ الکترون، بار منفی می‌گیرد؛ بار کل دو جسم همچنان صفر می‌ماند.'],
+['روش‌های باردار کردن اجسام','در روش مالش، دو جسم را به هم می‌مالیم و الکترون‌ها منتقل می‌شوند. در روش تماس، جسم باردار با جسم دیگر تماس مستقیم پیدا می‌کند. در روش القا، جسم باردار بدون تماس مستقیم باعث جدایی بارها می‌شود.','در القای الکتریکی، برای باردار کردن دائمی رسانا معمولاً از اتصال زمین و جدا کردن آن در ترتیب مناسب استفاده می‌شود. مالش و تماس با برخورد مستقیم همراه‌اند؛ القا بدون تماس مستقیم آغاز می‌شود.','مالش: تماس همراه مالش • تماس: برخورد مستقیم • القا: بدون تماس مستقیم','کدام روش باردار کردن به نزدیک کردن جسم باردار بدون تماس مستقیم وابسته است؟','روش القا.'],
+['رسانا و نارسانا','در رسانا بارهای الکتریکی می‌توانند به‌آسانی جابه‌جا شوند. فلزهایی مانند مس و آلومینیوم رساناهای خوب‌اند. در نارسانا، بارها به‌راحتی در ماده حرکت نمی‌کنند؛ مانند پلاستیک، شیشه و لاستیک.','رسانا بودن به معنی حرکت آسان بار در ماده است، نه اینکه ماده همیشه باردار باشد. یک جسم رسانا نیز می‌تواند خنثی باشد.','رسانا: جابه‌جایی آسان بار • نارسانا: جابه‌جایی دشوار بار','چرا سیم‌های برق معمولاً روکش پلاستیکی دارند؟','فلز داخل سیم جریان را عبور می‌دهد و روکش پلاستیکی نارسانا از تماس ناخواسته با رسانا جلوگیری می‌کند.'],
+['قانون کولن','قانون کولن اندازه نیروی الکتریکی بین دو بار نقطه‌ای را بیان می‌کند. نیرو با حاصل‌ضرب اندازه بارها نسبت مستقیم و با مجذور فاصله نسبت عکس دارد.','بارهای همنام همدیگر را دفع و بارهای ناهمنام همدیگر را جذب می‌کنند. برای محاسبه، بارها را به کولن و فاصله را به متر تبدیل کن.','F = k |q₁q₂| / r²  •  k = 9 × 10⁹','اگر هر دو بار ۳ برابر و فاصله نصف شود، نیرو چند برابر می‌شود؟','بارها در هم ضرب می‌شوند: ۳×۳=۹. نصف شدن فاصله نیرو را ۴ برابر می‌کند. پس ۹×۴=۳۶ برابر.'],
+['میدان الکتریکی','میدان الکتریکی ناحیه‌ای اطراف بار است که در آن به بار دیگر نیرو وارد می‌شود. جهت میدان در هر نقطه، جهت نیروی وارد بر بار آزمایشی مثبت است.','خطوط میدان از بار مثبت خارج و به بار منفی وارد می‌شوند؛ یکدیگر را قطع نمی‌کنند و تراکم بیشتر خطوط نشان‌دهنده میدان قوی‌تر است.','E = F / q  •  واحد: N/C','اگر نیروی ۰٫۰۰۴ نیوتون به بار مثبت ۲ میکروکولن وارد شود، شدت میدان چقدر است؟','E = 0.004 / (2×10⁻⁶) = 2×10³ N/C.'],
+['برق‌نما','برق‌نما وسیله‌ای برای تشخیص وجود بار الکتریکی است و معمولاً از کلاهک فلزی، میله رسانا و دو برگ نازک تشکیل می‌شود. نزدیک کردن جسم باردار می‌تواند بارها را در آن جابه‌جا کند و برگ‌ها را از هم دور کند.','برای تشخیص علامت بار جسم ناشناخته، باید بار اولیه برق‌نما معلوم باشد و تغییر بازشدگی برگ‌ها بررسی شود. باز شدن برگ‌ها به‌تنهایی نوع بار را مشخص نمی‌کند.','برق‌نما: تشخیص وجود بار؛ نوع بار با مقایسه تغییر بازشدگی و بار معلوم','آیا فقط با مشاهده باز شدن برگ‌های برق‌نما می‌توان مثبت یا منفی بودن جسم را فهمید؟','خیر؛ باید بار اولیه برق‌نما معلوم باشد و تغییر میزان بازشدگی بررسی شود.'],
+['جریان الکتریکی','جریان الکتریکی آهنگ عبور بار از یک مقطع رسانا است. برای ایجاد جریان پایدار در مدار ساده، مسیر رسانا باید بسته باشد و منبع انرژی وجود داشته باشد.','جهت قراردادی جریان در مدار خارجی از قطب مثبت به منفی است؛ اما الکترون‌ها در سیم فلزی از منفی به مثبت حرکت می‌کنند.','I = Q / t  •  واحد: A','در ۴ ثانیه، ۶ کولن بار عبور می‌کند. شدت جریان چقدر است؟','I = 6 / 4 = 1.5 A.'],
+['نماد علمی و توان‌ها','نماد علمی عدد را به صورت a×10ⁿ می‌نویسد؛ در حالت استاندارد ۱≤a<۱۰ است. برای عددهای خیلی کوچک توان معمولاً منفی و برای عددهای خیلی بزرگ توان معمولاً مثبت است.','در ضرب توان‌های هم‌پایه، توان‌ها جمع می‌شوند؛ در تقسیم از هم کم می‌شوند؛ در توانِ توان، توان‌ها ضرب می‌شوند. میکرو ۱۰⁻⁶ و نانو ۱۰⁻⁹ است.','3,000,000 = 3×10⁶  •  0.000002 = 2×10⁻⁶','۵ میکروکولن را به کولن تبدیل کن.','5 μC = 5×10⁻⁶ C.'],
+['چگالی سطحی بار','چگالی سطحی بار، مقدار بار الکتریکی به ازای واحد مساحت سطح است. هرچه بار روی مساحت کوچک‌تری متمرکز شود، چگالی سطحی بیشتر است.','واحد آن کولن بر متر مربع است. در محاسبه، مساحت باید برحسب متر مربع باشد.','σ = Q / A  •  واحد: C/m²','اگر ۶ میکروکولن بار روی سطحی به مساحت ۲ متر مربع باشد، چگالی سطحی چقدر است؟','σ = 6×10⁻⁶ / 2 = 3×10⁻⁶ C/m².']
+];
+function renderLessons(){ $('lessonList').innerHTML=lessons.map((l,i)=>`<article class="lesson"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span class="sub">مبحث ${i+1} از ۱۰</span><span class="tag">${state.completed.includes(i)?'✓ تکمیل‌شده':'در انتظار مطالعه'}</span></div><h3>${l[0]}</h3><p>${l[1]}</p><p><b style="color:#84dce8">نکته تکمیلی:</b> ${l[2]}</p><div class="formula">${l[3]}</div><div class="answer-block"><div class="callout"><b>مثال و پاسخ تشریحی:</b><br>${l[4]}<br><span style="color:#a5f0d5">${l[5]}</span></div></div><button class="btn ${state.completed.includes(i)?'':'primary'} no-print" onclick="completeLesson(${i})">${state.completed.includes(i)?'این مبحث تکمیل شده':'علامت‌گذاری به‌عنوان مطالعه‌شده'}</button></article>`).join('');}
+function completeLesson(i){if(state.completed.includes(i)){toast('این مبحث قبلاً ثبت شده است.');return}state.completed.push(i);addXP(20,'تکمیل مبحث '+(i+1));renderLessons();renderMastery()}
+function setStudyMode(on){document.querySelectorAll('.answer-block').forEach(x=>x.style.visibility=on?'hidden':'visible');toast(on?'پاسخ‌ها پنهان شدند':'پاسخ‌ها نمایش داده شدند')}
+function printCurrent(){let active=document.querySelector('.view.active');if(active&&active.id!=='view-lessons'){toast('برای PDF کامل، ابتدا بخش درس‌نامه را باز کن.');showView('lessons');setTimeout(()=>window.print(),250)}else window.print()}
+const tips=['بارهای همنام یکدیگر را دفع و بارهای ناهمنام یکدیگر را جذب می‌کنند.','جسم خنثی یعنی تعداد پروتون‌ها و الکترون‌هایش برابر است.','جسمی که الکترون از دست بدهد مثبت و جسمی که الکترون بگیرد منفی می‌شود.','در باردار شدن اجسام معمولی، الکترون‌ها جابه‌جا می‌شوند؛ پروتون‌ها در هسته باقی می‌مانند.','در روش القا، جسم باردار بدون تماس مستقیم باعث جدایی بارها می‌شود.','فلزات معمولاً رسانا و پلاستیک، شیشه و لاستیک معمولاً نارسانا هستند.','در قانون کولن، نیرو با حاصل‌ضرب دو بار نسبت مستقیم دارد.','نیروی کولن با مجذور فاصله نسبت عکس دارد؛ توان فاصله ۲ است.','اگر فاصله نصف شود، نیرو ۴ برابر می‌شود؛ اگر فاصله دو برابر شود، نیرو یک‌چهارم می‌شود.','اگر هر دو بار ۳ برابر و فاصله نصف شود، نیرو ۳۶ برابر می‌شود.','جهت میدان، جهت نیروی وارد بر بار آزمایشی مثبت است.','خطوط میدان از بار مثبت خارج و به بار منفی وارد می‌شوند و همدیگر را قطع نمی‌کنند.','تراکم بیشتر خطوط میدان یعنی میدان قوی‌تر.','برق‌نما وجود بار را نشان می‌دهد؛ تشخیص نوع بار به بار اولیه معلوم نیاز دارد.','جهت قراردادی جریان در سیم فلزی مخالف جهت حرکت الکترون‌هاست.','واحد بار کولن، واحد جریان آمپر، واحد نیرو نیوتون و واحد میدان نیوتون بر کولن است.','در ضرب توان‌های هم‌پایه، توان‌ها جمع و در تقسیم، از هم کم می‌شوند.','میکرو برابر ۱۰⁻⁶ و نانو برابر ۱۰⁻⁹ است.','در قانون کولن، بارها را به کولن و فاصله را به متر تبدیل کن.','در مسائل، داده‌ها و واحدها را قبل از جای‌گذاری در فرمول مرتب بنویس.'];
+function renderTips(){$('tipsList').innerHTML=tips.map((t,i)=>`<div class="lesson"><span class="sub">نکته ${i+1}</span><p style="margin:5px 0;color:#f0f7ff">${t}</p></div>`).join('');$('checklist').innerHTML=['تعریف بار و ساختار اتم را بلدم.','تفاوت سه روش باردار کردن را می‌دانم.','رسانا و نارسانا را با مثال تشخیص می‌دهم.','قانون کولن و تغییرات چندبرابری را حل می‌کنم.','جهت میدان و خطوط میدان را توضیح می‌دهم.','فرمول‌های جریان و تبدیل واحدها را بلدم.'].map((t,i)=>`<label style="display:block;padding:7px 0"><input type="checkbox" ${state.checklist.includes(i)?'checked':''} onchange="toggleChecklist(${i},this.checked)"> ${t}</label>`).join('')}
+function toggleChecklist(i,v){if(v&&!state.checklist.includes(i))state.checklist.push(i);else state.checklist=state.checklist.filter(x=>x!==i);save()}
+const flashCards=[['بارهای همنام چه نیرویی به هم وارد می‌کنند؟','نیروی دافعه؛ یکدیگر را دفع می‌کنند.'],['جسم با دریافت الکترون چه باری پیدا می‌کند؟','بار منفی؛ چون تعداد الکترون‌هایش بیشتر می‌شود.'],['واحد بار الکتریکی چیست؟','کولن (C).'],['در روش القا، تماس مستقیم وجود دارد؟','خیر؛ القا بدون تماس مستقیم آغاز می‌شود.'],['اگر فاصله دو بار نصف شود، نیروی کولن چند برابر می‌شود؟','۴ برابر؛ چون نیرو با مجذور فاصله نسبت عکس دارد.'],['جهت میدان الکتریکی چگونه تعریف می‌شود؟','جهت نیروی وارد بر بار آزمایشی مثبت.'],['خطوط میدان از کجا خارج می‌شوند؟','از بار مثبت خارج و به بار منفی وارد می‌شوند.'],['واحد شدت جریان چیست؟','آمپر (A).'],['میکرو و نانو برابر چه توانی از ۱۰ هستند؟','میکرو = 10⁻⁶ و نانو = 10⁻⁹.'],['اگر هر دو بار سه برابر شوند و فاصله ثابت بماند، نیرو چه می‌شود؟','۹ برابر می‌شود.'],['چرا برای تعیین علامت بار با برق‌نما باید بار اولیه را بدانیم؟','چون باید تغییر میزان بازشدگی برگ‌ها را نسبت به وضعیت اولیه مقایسه کنیم.'],['فرمول شدت جریان چیست؟','I = Q / t.']];
+let flashIndex=0;
+function flashOrder(){return flashCards.map((c,i)=>i).sort((a,b)=>(state.flash[a]?.due||0)-(state.flash[b]?.due||0))}
+function renderFlash(){let order=flashOrder();flashIndex=((flashIndex%order.length)+order.length)%order.length;let i=order[flashIndex];$('flashQuestion').textContent=flashCards[i][0];$('flashAnswer').textContent=flashCards[i][1];$('flashAnswer').hidden=true;$('flashCount').textContent='کارت '+fmt(flashIndex+1)+' از '+fmt(order.length);$('flashDue').textContent='برای یادگیری فعال، قبل از دیدن پاسخ حدس بزن.';window.currentFlash=i}
+function revealFlash(){$('flashAnswer').hidden=false}
+function nextFlash(){flashIndex++;renderFlash()}
+function rateFlash(kind){let i=window.currentFlash;if(i===undefined)return;let old=state.flash[i]||{interval:0};let interval=kind==='again'?0:Math.max(1,(old.interval||0)+1);state.flash[i]={interval,due:Date.now()+(kind==='again'?60000:interval*86400000)};addXP(kind==='known'?5:1,kind==='known'?'مرور موفق فلش‌کارت':'تمرین فلش‌کارت');nextFlash()}
+const bank=[
+{q:'دو بار هم‌اندازه و همنام در فاصله r نیروی F به هم وارد می‌کنند. اگر فاصله ۲ برابر شود، نیرو چقدر می‌شود؟',o:['۲F','F/2','F/4','۴F'],a:2,e:'طبق قانون کولن، نیرو با مجذور فاصله نسبت عکس دارد؛ ۲²=۴، پس نیرو یک‌چهارم می‌شود.'},
+{q:'جسمی ۴ الکترون دریافت می‌کند. بار آن نسبت به قبل چگونه تغییر می‌کند؟',o:['به اندازه ۴e منفی‌تر می‌شود','به اندازه ۴e مثبت‌تر می‌شود','خنثی می‌شود','تغییر نمی‌کند'],a:0,e:'هر الکترون بار منفی دارد؛ دریافت ۴ الکترون، بار جسم را به اندازه ۴e منفی‌تر می‌کند.'},
+{q:'اگر هر دو بار ۲ برابر و فاصله ۲ برابر شود، اندازه نیرو چه تغییری می‌کند؟',o:['۲ برابر','۴ برابر','بدون تغییر','نصف'],a:2,e:'صورت کسر ۴ برابر می‌شود و مجذور فاصله نیز ۴ برابر؛ نسبت نهایی ثابت می‌ماند.'},
+{q:'دو بار ناهمنام در فاصله مشخصی قرار دارند. نیروی بین آن‌ها از چه نوع است؟',o:['دافعه','جاذبه','صفر','بستگی به جرم دارد'],a:1,e:'بارهای ناهمنام یکدیگر را جذب می‌کنند.'},
+{q:'بار ۵ میکروکولن برابر چند کولن است؟',o:['5×10⁻³','5×10⁻⁶','5×10⁶','5×10⁻⁹'],a:1,e:'پیشوند میکرو برابر ۱۰ به توان منفی ۶ است.'},
+{q:'اگر نیروی وارد بر بار مثبت آزمایشی به سمت راست باشد، جهت میدان کدام است؟',o:['چپ','راست','بالا','پایین'],a:1,e:'جهت میدان همان جهت نیروی وارد بر بار آزمایشی مثبت است.'},
+{q:'در ۵ ثانیه، ۲۰ کولن بار عبور می‌کند. شدت جریان چقدر است؟',o:['4 A','25 A','100 A','0.25 A'],a:0,e:'I=Q/t=20/5=4 آمپر.'},
+{q:'در یک مجموعه منزوی، مجموع بار الکتریکی چه می‌شود؟',o:['همیشه زیاد می‌شود','همیشه کم می‌شود','ثابت می‌ماند','به جرم وابسته است'],a:2,e:'طبق قانون پایستگی بار، مجموع جبری بارها ثابت می‌ماند.'},
+{q:'اگر هر دو بار ۳ برابر و فاصله نصف شود، نیرو چند برابر می‌شود؟',o:['۱۲','۱۸','۳۶','۹'],a:2,e:'سه برابر شدن هر دو بار نیرو را ۹ برابر و نصف شدن فاصله آن را ۴ برابر می‌کند؛ ۹×۴=۳۶.'},
+{q:'کدام عبارت درباره خطوط میدان درست است؟',o:['همدیگر را قطع می‌کنند','از بار منفی خارج می‌شوند','از مثبت خارج و به منفی وارد می‌شوند','همیشه دایره‌اند'],a:2,e:'خطوط میدان الکتریکی از بار مثبت خارج و به بار منفی وارد می‌شوند و یکدیگر را قطع نمی‌کنند.'},
+{q:'جسم خنثی دارای چه ویژگی‌ای است؟',o:['پروتون ندارد','الکترون ندارد','تعداد پروتون و الکترون برابر است','نوترون ندارد'],a:2,e:'خنثی بودن به معنی برابر بودن تعداد بارهای مثبت و منفی است.'},
+{q:'در سیم فلزی، جهت حرکت الکترون‌ها نسبت به جهت قراردادی جریان چگونه است؟',o:['هم‌جهت','خلاف جهت','عمود بر هم','همیشه ثابت نیست'],a:1,e:'الکترون‌ها از قطب منفی به مثبت حرکت می‌کنند، اما جهت قراردادی جریان در مدار خارجی از مثبت به منفی است.'},
+{q:'اگر فاصله دو بار ۳ برابر شود، نیروی کولن چند برابر می‌شود؟',o:['۳','۹','۱/۳','۱/۹'],a:3,e:'مجذور فاصله ۹ برابر می‌شود؛ پس نیرو یک‌نهم می‌شود.'},
+{q:'واحد شدت میدان الکتریکی در رابطه E=F/q چیست؟',o:['کولن','نیوتون بر کولن','آمپر','ژول'],a:1,e:'نیرو برحسب نیوتون و بار برحسب کولن است؛ پس واحد N/C می‌شود.'},
+{q:'چگالی سطحی بار از تقسیم کدام دو کمیت به دست می‌آید؟',o:['بار بر مساحت','نیرو بر زمان','جرم بر حجم','بار بر زمان'],a:0,e:'σ=Q/A؛ یعنی بار تقسیم بر مساحت.'}
+];
+let examQuestions=[],examIndex=0,examAnswers=[],examTimer=null,seconds=0;
+function startExam(){let n=+$('examCount').value;examQuestions=[...bank].sort(()=>Math.random()-.5).slice(0,n);examIndex=0;examAnswers=[];seconds=0;$('examStart').hidden=true;$('examResult').hidden=true;$('examArea').hidden=false;clearInterval(examTimer);examTimer=setInterval(()=>{seconds++;$('examTimer').textContent='زمان: '+fmt(Math.floor(seconds/60))+':'+String(seconds%60).padStart(2,'0')},1000);renderQuestion()}
+function renderQuestion(){let q=examQuestions[examIndex];$('examProgress').textContent='سؤال '+fmt(examIndex+1)+' از '+fmt(examQuestions.length);$('examBar').style.width=(examIndex/examQuestions.length*100)+'%';$('questionHost').innerHTML=`<div class="question"><span class="tag">سؤال ${examIndex+1}</span><h3>${q.q}</h3>${q.o.map((x,i)=>`<button class="option ${examAnswers[examIndex]===i?'correct':''}" onclick="chooseOption(${i})">${['الف','ب','ج','د'][i]}) ${x}</button>`).join('')}<div class="feedback" id="qFeedback">${examAnswers[examIndex]!==undefined?'پاسخ ثبت‌شده: '+['الف','ب','ج','د'][examAnswers[examIndex]]:''}</div></div>`}
+function chooseOption(i){examAnswers[examIndex]=i;renderQuestion()}
+function nextQuestion(){if(examAnswers[examIndex]===undefined){toast('اول یک گزینه انتخاب کن.');return}if(examIndex<examQuestions.length-1){examIndex++;renderQuestion()}else finishExam()}
+function finishExam(){clearInterval(examTimer);let correct=examQuestions.reduce((n,q,i)=>n+(examAnswers[i]===q.a?1:0),0),score=Math.round(correct/examQuestions.length*100);state.best=state.best===null?score:Math.max(state.best,score);examQuestions.forEach((q,i)=>{if(examAnswers[i]!==q.a){state.mistakes.unshift({q:q.q,chosen:examAnswers[i]===undefined?'بدون پاسخ':q.o[examAnswers[i]],answer:q.o[q.a],explain:q.e});}});state.mistakes=state.mistakes.slice(0,100);addXP(correct*10+score,'پایان آزمون با نمره '+score+'٪');$('examArea').hidden=true;$('examStart').hidden=false;$('examResult').hidden=false;$('examResult').innerHTML=`<h2>نتیجه آزمون</h2><div class="kpi">${fmt(score)}٪</div><p>پاسخ درست: ${fmt(correct)} از ${fmt(examQuestions.length)} • زمان: ${fmt(Math.floor(seconds/60))} دقیقه و ${fmt(seconds%60)} ثانیه</p><h3>تحلیل پاسخ‌ها</h3>${examQuestions.map((q,i)=>`<div class="lesson"><b>${i+1}. ${q.q}</b><p style="color:${examAnswers[i]===q.a?'#7ce2b6':'#ffaaaa'}">پاسخ تو: ${examAnswers[i]===undefined?'بدون پاسخ':q.o[examAnswers[i]]}</p><p>پاسخ درست: ${q.o[q.a]}</p><p>${q.e}</p></div>`).join('')}<button class="btn primary" onclick="startExam()">آزمون دوباره</button><button class="btn" onclick="showView('mistakes')">رفتن به دفتر اشتباهات</button>`;renderMistakes()}
+function renderMistakes(){$('mistakeCount').textContent=fmt(state.mistakes.length);$('mistakeList').innerHTML=state.mistakes.length?state.mistakes.map((m,i)=>`<div class="lesson"><span class="sub">اشتباه ${i+1}</span><h3>${m.q}</h3><p style="color:#ffaaaa">پاسخ ثبت‌شده: ${m.chosen}</p><p style="color:#9df0d3">پاسخ درست: ${m.answer}</p><p>${m.explain}</p></div>`).join(''):'<div class="empty">هنوز اشتباهی ثبت نشده. بعد از آزمون، پاسخ‌های غلط اینجا ذخیره می‌شوند.</div>'}
+function clearMistakes(){if(confirm('دفتر اشتباهات پاک شود؟')){state.mistakes=[];save();renderMistakes()}}
+const achievements=[['شروع قدرتمند','اولین مبحث را تکمیل کن','▤',()=>state.completed.length>=1],['ذهن منظم','۵ مبحث را تکمیل کن','✦',()=>state.completed.length>=5],['استاد درس','هر ۱۰ مبحث را تکمیل کن','⚛',()=>state.completed.length>=10],['اولین چالش','یک آزمون انجام بده','◈',()=>state.best!==null],['نمره درخشان','به نمره ۸۰٪ برس','♛',()=>state.best>=80],['کلکسیونر XP','به ۲۰۰ امتیاز برس','★',()=>state.xp>=200]];
+function renderAchievements(){let level=Math.floor(state.xp/100)+1,rem=state.xp%100;$('level').textContent=fmt(level);$('levelBar').style.width=rem+'%';$('levelText').textContent=fmt(rem)+' از ۱۰۰ امتیاز تا سطح بعدی';let count=achievements.filter(a=>a[3]()).length;$('achCount').textContent=fmt(count)+'/۶';$('achievementGrid').innerHTML=achievements.map(a=>`<div class="card"><div class="card-icon">${a[2]}</div><h3>${a[0]}</h3><p>${a[1]}</p><span class="badge">${a[3]?'دریافت‌شده':'قفل است'}</span></div>`).join('');$('activityLog').innerHTML=state.activity.length?state.activity.map(x=>'• '+x).join('<br>'):'هنوز فعالیتی ثبت نشده است.'}
+function resetAll(){if(confirm('همه پیشرفت‌ها و امتیازها پاک شوند؟')){state={...defaultState};save();renderLessons();renderTips();renderMistakes();renderAchievements();renderFlash();renderMastery();renderDaily();toast('پیشرفت بازنشانی شد.')}}
+function runCoulomb(){let q1=+$('labQ1').value*1e-6,q2=+$('labQ2').value*1e-6,r=+$('labR').value;if(!r||r<=0){toast('فاصله باید بزرگ‌تر از صفر باشد.');return}let f=9e9*Math.abs(q1*q2)/(r*r);$('labType').textContent=q1*q2<0?'جاذبه':'دافعه';$('labResult').textContent='F = '+sci(f)+' N';$('coulombStage').style.filter='brightness('+(1+Math.min(f,1)*.12)+')';}
+function runElectro(){let v=+$('electroRange').value,angle=v*.55;$('leaf1').style.transform=`rotate(${-angle}deg)`;$('leaf2').style.transform=`rotate(${angle}deg)`;$('electroText').textContent=v<15?'جسم هنوز دور است.':v<55?'با نزدیک شدن جسم، جدایی بارها بیشتر می‌شود.':'اثر القایی در این نمایش بیشتر شده و برگ‌ها بازترند.'}
+function runCurrent(){let q=+$('currentQ').value,t=+$('currentT').value;if(t<=0){toast('زمان باید بزرگ‌تر از صفر باشد.');return}$('currentResult').textContent='I = '+sci(q/t)+' A'}
+function calcCoulomb(){let q1=+$('cq1').value*1e-6,q2=+$('cq2').value*1e-6,r=+$('cr').value;if(r<=0){toast('فاصله باید مثبت باشد.');return}$('cResult').textContent='F = '+sci(9e9*Math.abs(q1*q2)/(r*r))+' N'}
+function calcField(){let f=+$('ef').value,q=+$('eq').value*1e-6;if(q===0){toast('بار نمی‌تواند صفر باشد.');return}$('eResult').textContent='E = '+sci(f/Math.abs(q))+' N/C'}
+function calcCurrent(){let q=+$('iq').value,t=+$('it').value;if(t<=0){toast('زمان باید مثبت باشد.');return}$('iResult').textContent='I = '+sci(q/t)+' A'}
+function calcElectrons(){let q=Math.abs(+$('nq').value);$('nResult').textContent='n = '+sci(q/1.6e-19)+' electron'}
+function toggleFocus(){document.body.classList.toggle('focus-mode');let on=document.body.classList.contains('focus-mode');document.querySelector('.sidebar').style.display=on?'none':'';document.querySelector('.shell').style.gridTemplateColumns=on?'1fr':'';toast(on?'حالت تمرکز فعال شد':'حالت عادی')}
+
+// PHYSICS LAB 3.0: formula reference, daily challenge, guided solving and mastery map.
+function renderMastery(){
+ const done=state.completed.length,pct=Math.round(done/lessons.length*100);
+ if($('masteryDone'))$('masteryDone').textContent=fmt(done)+'/۱۰';
+ if($('masteryPercent'))$('masteryPercent').textContent=fmt(pct)+'٪';
+ if($('masteryBar'))$('masteryBar').style.width=pct+'%';
+ const rows=lessons.map((l,i)=>`<div class="mastery-item"><div class="mastery-num">${i+1}</div><div><b>${l[0]}</b><div class="small">${state.completed.includes(i)?'تکمیل شده':'هنوز مطالعه نشده'}</div></div><button class="btn ${state.completed.includes(i)?'':'primary'}" onclick="showView('lessons')">${state.completed.includes(i)?'مرور درس':'رفتن به درس‌نامه'}</button></div>`).join('');
+ if($('masteryList'))$('masteryList').innerHTML=rows;
+ if($('homeMastery'))$('homeMastery').innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px"><b>${fmt(done)} از ۱۰ مبحث</b><span class="small">${fmt(pct)}٪ پیشرفت</span></div><div class="progress"><i style="width:${pct}%"></i></div><div class="chips">${lessons.slice(0,5).map((l,i)=>`<span class="chip">${state.completed.includes(i)?'✓':'○'} ${l[0]}</span>`).join('')}<span class="chip">+۵ مبحث دیگر</span></div>`;
+}
+function dailyInfo(){
+ const d=new Date(),key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+ const index=(d.getFullYear()*372+(d.getMonth()+1)*31+d.getDate())%bank.length;
+ return {key,q:bank[index]};
+}
+function renderDaily(){
+ const {key,q}=dailyInfo(),saved=state.dailyChallenge||{},done=saved.date===key;
+ $('dailyDateLabel').textContent='چالش '+new Date().toLocaleDateString('fa-IR');
+ $('dailyQuestion').innerHTML=`<span class="tag">سؤال روز</span><h3>${q.q}</h3>${q.o.map((x,i)=>`<button class="daily-choice ${done&&saved.choice===i?'selected':''}" ${done?'disabled':''} onclick="answerDaily(${i})">${['الف','ب','ج','د'][i]}) ${x}</button>`).join('')}`;
+ $('dailyFeedback').textContent=done?(saved.correct?'آفرین! پاسخ درست بود؛ ۱۰ امتیاز ثبت شده.':'پاسخ امروز ثبت شده؛ فردا چالش تازه‌ای داری.'):'';
+ $('dailyStatus').textContent=done?'این چالش امروز انجام شده است.':'برای ثبت نتیجه، یکی از گزینه‌ها را انتخاب کن.';
+}
+function answerDaily(choice){
+ const {key,q}=dailyInfo();
+ if(state.dailyChallenge&&state.dailyChallenge.date===key){toast('چالش امروز قبلاً ثبت شده است.');return}
+ const correct=choice===q.a;state.dailyChallenge={date:key,choice,correct};
+ if(correct)addXP(10,'پاسخ درست چالش روزانه');else{state.activity.unshift('انجام چالش روزانه');save()}
+ renderDaily();$('dailyFeedback').textContent=(correct?'درست گفتی! ':'این بار درست نبود. ')+q.e;
+}
+let solverData=null;
+function solverShow(stage){[1,2,3,4].forEach(n=>{$('solverStage'+n).hidden=n!==stage;$('solverDot'+n).classList.toggle('active',n===stage)})}
+function solverCheckData(){
+ const q1=Number($('solveQ1').value),q2=Number($('solveQ2').value),r=Number($('solveR').value);
+ if(!Number.isFinite(q1)||!Number.isFinite(q2)||!Number.isFinite(r)||r<=0){$('solverFeedback1').textContent='مقادیر را بررسی کن؛ فاصله باید بزرگ‌تر از صفر باشد.';return}
+ if(Math.abs(q1-2)>0.001||Math.abs(q2-3)>0.001||Math.abs(r-30)>0.001){$('solverFeedback1').textContent='برای این تمرین، داده‌ها را مطابق صورت سؤال وارد کن: ۲، ۳ و ۳۰.';return}
+ solverData={q1:q1*1e-6,q2:q2*1e-6,r:r/100};$('solverFeedback1').textContent='عالی! داده‌ها درست‌اند و فاصله به متر تبدیل شد.';solverShow(2);
+}
+function solverChooseFormula(ok){if(ok){$('solverFeedback2').textContent='درست است؛ قانون کولن رابطه نیروی بین دو بار را می‌دهد.';solverShow(3)}else $('solverFeedback2').textContent='این رابطه برای این مسئله مناسب نیست. دوباره تلاش کن.'}
+function solverCalculate(){
+ if(!solverData){toast('ابتدا داده‌ها را بررسی کن.');solverShow(1);return}
+ const f=9e9*Math.abs(solverData.q1*solverData.q2)/(solverData.r*solverData.r);
+ $('solverFinal').textContent='F = 9×10⁹ × (2×10⁻⁶ × 3×10⁻⁶) / (0.30)² = '+sci(f)+' N';solverShow(4);addXP(5,'حل مرحله‌ای مسئله فیزیک');
+}
+function resetSolver(){solverData=null;['solverFeedback1','solverFeedback2','solverFeedback3'].forEach(id=>$(id).textContent='');solverShow(1)}
+
+
+// Interactive parallelogram geometry lab
+let geoDiagonalsVisible=false,geoTrianglesVisible=false,geoTrianglesSeparated=false,geoSelectedDiagonal='AC';
+const geoFmt=n=>Number(n).toLocaleString('fa-IR',{maximumFractionDigits:1});
+function updateGeometry(){
+ const angle=Number($('geoAngle').value),side=Number($('geoSide').value),rad=angle*Math.PI/180;
+ const A={x:155,y:250},B={x:355,y:250};
+ const D={x:A.x+side*Math.cos(rad),y:A.y-side*Math.sin(rad)};
+ const C={x:B.x+D.x-A.x,y:B.y+D.y-A.y};
+ const pts=[A,B,C,D],pointStr=pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+ $('geoPoly').setAttribute('points',pointStr);
+ const tri1=geoSelectedDiagonal==='AC'?[A,B,C]:[A,B,D];
+ const tri2=geoSelectedDiagonal==='AC'?[A,C,D]:[B,C,D];
+ $('geoTriA').setAttribute('points',tri1.map(p=>`${p.x},${p.y}`).join(' '));
+ $('geoTriB').setAttribute('points',tri2.map(p=>`${p.x},${p.y}`).join(' '));
+ [['geoA',A],['geoB',B],['geoC',C],['geoD',D]].forEach(([id,p])=>{$(id).setAttribute('cx',p.x);$(id).setAttribute('cy',p.y)});
+ [['geoLabelA',A,-20,25],['geoLabelB',B,0,28],['geoLabelC',C,10,-5],['geoLabelD',D,-20,-15]].forEach(([id,p,dx,dy])=>{$(id).setAttribute('x',p.x+dx);$(id).setAttribute('y',p.y+dy)});
+ $('geoDiag1').setAttribute('x1',A.x);$('geoDiag1').setAttribute('y1',A.y);$('geoDiag1').setAttribute('x2',C.x);$('geoDiag1').setAttribute('y2',C.y);
+ $('geoDiag2').setAttribute('x1',B.x);$('geoDiag2').setAttribute('y1',B.y);$('geoDiag2').setAttribute('x2',D.x);$('geoDiag2').setAttribute('y2',D.y);
+ const len=(P,Q)=>Math.hypot(Q.x-P.x,Q.y-P.y);
+ $('geoAngleValue').textContent=geoFmt(angle)+'°';$('geoSideValue').textContent=geoFmt(side);
+ $('geoAngleLabel').textContent='∠A = '+geoFmt(angle)+'°';$('geoAngleLabel').setAttribute('x',A.x+18);$('geoAngleLabel').setAttribute('y',A.y-18);
+ $('geoDiagAC').textContent=geoFmt(len(A,C));$('geoDiagBD').textContent=geoFmt(len(B,D));
+ $('geoAngleA').textContent=geoFmt(angle)+'°';$('geoAngleB').textContent=geoFmt(180-angle)+'°';
+ $('geoAngleC').textContent=geoFmt(angle)+'°';$('geoAngleD').textContent=geoFmt(180-angle)+'°';
+ $('geoDiag1').style.opacity=geoDiagonalsVisible?'1':'0';$('geoDiag2').style.opacity=geoDiagonalsVisible?'1':'0';
+ $('geoPoly').style.opacity=geoTrianglesVisible?'0':'1';$('geoTriA').style.opacity=geoTrianglesVisible?'1':'0';$('geoTriB').style.opacity=geoTrianglesVisible?'1':'0';
+ $('geoTriA').classList.toggle('separated',geoTrianglesSeparated);$('geoTriB').classList.toggle('separated',geoTrianglesSeparated);
+ $('geoSeparateBtn').disabled=!geoTrianglesVisible;
+ $('geoUseAC').classList.toggle('primary',geoSelectedDiagonal==='AC');$('geoUseBD').classList.toggle('primary',geoSelectedDiagonal==='BD');
+ $('geoExplain').textContent=geoTrianglesSeparated?`دو مثلثِ حاصل از قطر ${geoSelectedDiagonal} در جهت‌های مخالف از هم جدا شده‌اند. این دو مثلث هم‌نهشت‌اند و مساحت برابر دارند.`:'با تغییر زاویه و طول ضلع، شکل و اندازه قطرها به‌صورت زنده تغییر می‌کند. هر قطر، متوازی‌الاضلاع را به دو مثلث هم‌نهشت تقسیم می‌کند.';
+}
+function toggleGeoDiagonals(){geoDiagonalsVisible=!geoDiagonalsVisible;$('geoDiagsBtn').textContent=geoDiagonalsVisible?'پنهان‌کردن قطرها':'نمایش قطرها';updateGeometry()}
+function toggleGeoTriangles(){geoTrianglesVisible=!geoTrianglesVisible;geoTrianglesSeparated=false;$('geoTrianglesBtn').textContent=geoTrianglesVisible?'نمایش شکل کامل':'تقسیم به دو مثلث';$('geoSeparateBtn').textContent='حرکت متحرک مثلث‌ها';updateGeometry()}
+function separateGeoTriangles(){if(!geoTrianglesVisible){geoTrianglesVisible=true;$('geoTrianglesBtn').textContent='نمایش شکل کامل'}geoTrianglesSeparated=!geoTrianglesSeparated;$('geoSeparateBtn').textContent=geoTrianglesSeparated?'بازگرداندن مثلث‌ها':'حرکت متحرک مثلث‌ها';updateGeometry()}
+function setGeoDiagonal(which){geoSelectedDiagonal=which;geoTrianglesSeparated=false;$('geoSeparateBtn').textContent='حرکت متحرک مثلث‌ها';updateGeometry()}
+function resetGeometry(){$('geoAngle').value=45;$('geoSide').value=120;geoDiagonalsVisible=false;geoTrianglesVisible=false;geoTrianglesSeparated=false;geoSelectedDiagonal='AC';$('geoDiagsBtn').textContent='نمایش قطرها';$('geoTrianglesBtn').textContent='تقسیم به دو مثلث';$('geoSeparateBtn').textContent='حرکت متحرک مثلث‌ها';updateGeometry()}
+
+function init(){updateGeometry();renderLessons();renderTips();renderFlash();renderMistakes();renderAchievements();renderStats();renderMastery();renderDaily();runCoulomb();runElectro();runCurrent()}
+init();
+let deferredInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;$('installAppBtn').hidden=false});
+window.addEventListener('appinstalled',()=>{$('installAppBtn').hidden=true;toast('اپ با موفقیت نصب شد')});
+async function installApp(){if(!deferredInstallPrompt){toast('برای نصب، سایت را در مرورگر باز کن و از منوی مرورگر گزینه نصب را بزن.');return}deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null}
+if('serviceWorker' in navigator && location.protocol!=='file:'){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
